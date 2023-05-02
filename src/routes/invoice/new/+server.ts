@@ -1,4 +1,5 @@
 // src/routes/invoice/new/+server.ts
+import db from '$lib/server/db';
 import { text, error, type RequestHandler } from '@sveltejs/kit';
 import easyinvoice from 'easyinvoice';
 import * as yup from 'yup';
@@ -64,6 +65,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		// Generate the invoice using easyinvoice
 		const result = await easyinvoice.createInvoice(invoiceData);
+    db.tables.invoices.createInvoice(invoiceData);
 
 		// Return the PDF to the client
 		return text(result.pdf, {
